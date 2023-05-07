@@ -56,5 +56,14 @@
     <ClInclude Include="MySTL\memory.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MySTL\uninitialized.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MySTL\iterator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MySTL\construct.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

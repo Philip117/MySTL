@@ -1,7 +1,9 @@
 #pragma once
 
-//#include <cstring>
+// 该头文件包含 mystl 的基本算法
+
 #include "util.h"
+#include "iterator.h"
 
 namespace mystl
 {
@@ -49,5 +51,56 @@ namespace mystl
 	void iter_swap(FIter1 lhs, FIter2 rhs)
 	{
 		mystl::swap(*lhs, *rhs);	// 交换指定元素
+	}
+
+	/*
+	* 【作用】从 fitst 位置开始填充 n 个值
+	*/
+	template <typename OutputIter, typename Size, typename T>
+	OutputIter unchecked_fill_n(OutputIter first, Size n, const T& value)
+	{
+		// 省去了定义新变量
+		for (; n > 0; --n, first++)
+		{
+			*first = value;
+		}
+
+		return first;
+	}
+
+	template <typename OutputIter, typename Size, typename T>
+	OutputIter fill_n(OutputIter first, Size n, const T& value)
+	{
+		return unchecked_fill_n(first, n, value);
+	}
+
+	/*
+	* 【作用】将单向移动迭代器区间 [first, last) 的所有元素赋值为 value
+	*/
+	template <typename ForwardIter, typename T>
+	void fill_cat(ForwardIter first, ForwardIter last, const T& value, mystl::forward_iterator_tag)
+	{
+		for (; first != last; first++)
+		{
+			*first = value;
+		}
+	}
+
+	/*
+	* 【作用】将随机读取迭代器区间 [first, last) 的所有元素赋值为 value
+	*/
+	template <typename RandomIter, typename T>
+	void fill_cat(RandomIter first, RandomIter last, const T& value, mystl::random_access_iterator_tag)
+	{
+		fill_cat(first, last - first, value, iterator_category(first));
+	}
+
+	/*
+	* 【作用】将单向移动迭代器区间 [first, last) 的所有元素赋值为 value？
+	*/
+	template <typename ForwardIter, typename T>
+	void fill(ForwardIter first, ForwardIter last, const T& value, mystl::forward_iterator_tag)
+	{
+		fill_cat(first, last, value, iterator_category(first));
 	}
 }

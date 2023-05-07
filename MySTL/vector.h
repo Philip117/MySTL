@@ -49,7 +49,7 @@ namespace mystl
 	private:
 		void try_init() noexcept;	// 默认初始化容量为 16 的 vector
 		void init_space(size_type size, size_type cap);	// 初始化大小为 size、容量为 cap 的vector
-		void fill_init(size_type n, const value_type& value);
+		void fill_init(size_type n, const value_type& value);	// 初始化大小为 n 的 vector，填充默认值为 value
 	};
 
 	template <typename T>
@@ -91,7 +91,7 @@ namespace mystl
 	void vector<T>::fill_init(size_type n, const value_type& value)
 	{
 		const size_type init_size = mystl::max(static_cast<size_type>(16), n);	// 取默认长度和所给大小的最大值
-		init_space(n, init_size);
-		mystl::
+		init_space(n, init_size);	// 初始化vector
+		mystl::uninitialied_fill_n(begin_, n, value);	// 填充默认值
 	}
 }

@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,6 +138,8 @@
     <ClInclude Include="MySTL\algobase.h" />
     <ClInclude Include="MySTL\algorithm.h" />
     <ClInclude Include="MySTL\allocator.h" />
+    <ClInclude Include="MySTL\construct.h" />
+    <ClInclude Include="MySTL\iterator.h" />
     <ClInclude Include="MySTL\memory.h" />
     <ClInclude Include="MySTL\vector.h" />
     <ClInclude Include="Test\algorithm_performance_test.h" />
@@ -144,6 +147,7 @@
     <ClInclude Include="MySTL\numeric.h" />
     <ClInclude Include="MySTL\set_algo.h" />
     <ClInclude Include="MySTL\util.h" />
+    <ClInclude Include="MySTL\uninitialized.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

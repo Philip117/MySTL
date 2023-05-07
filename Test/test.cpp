@@ -3,13 +3,19 @@
 #include <algorithm>
 #include "../MySTL/algorithm.h"
 
+template <typename T>
+struct A
+{
+	T b;
+	A() {};
+};
+
+
 int main()
 {
-	int a[5] = { 1,2,3,4,5 };
-	std::vector<int> b = { 6,7,8,9,10 };
+	A<int*> a;
 
-	std::iter_swap(a, b.begin());
-	mystl::iter_swap(a + 1, b.begin()+1);
+	std::cout << a.b << std::endl;
 
 	return 0;
 }
