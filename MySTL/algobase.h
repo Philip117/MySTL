@@ -17,7 +17,7 @@ namespace mystl
 	}
 
 	/*
-	* 【作用】用函数comp代替三元运算符取二者中的较大值
+	* 【作用】用函数 comp() 代替三元运算符取二者中的较大值
 	*/
 	template <typename T, typename Compare>
 	const T& max(const T& lhs, const T& rhs, Compare comp)
@@ -35,7 +35,7 @@ namespace mystl
 	}
 
 	/*
-	* 【作用】用函数comp代替三元运算符取二者中的较小值
+	* 【作用】用函数 comp() 代替三元运算符取二者中的较小值
 	*/
 	template <typename T, typename Compare>
 	const T& min(const T& lhs, const T& rhs, Compare comp)
@@ -68,6 +68,10 @@ namespace mystl
 		return first;
 	}
 
+	/*
+	* 【作用】同 unchecked_fill_n(OutputIter first, Size n, const T& value)
+	* 
+	*/
 	template <typename OutputIter, typename Size, typename T>
 	OutputIter fill_n(OutputIter first, Size n, const T& value)
 	{

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "type_traits.h"
+
 namespace mystl
 {
 	// 五种迭代器（标记）
@@ -17,6 +19,7 @@ namespace mystl
 	template <typename Category, typename T, typename Distance = ptrdiff_t, typename Pointer = T*, class Reference = T&>
 	struct iterator
 	{
+		// 定义类型别名
 		typedef Category	iterator_category;	// 迭代器类型
 		typedef T			value_type;			// 变量类型
 		typedef Pointer		pointer;
@@ -55,6 +58,7 @@ namespace mystl
 	template <typename Iterator>
 	struct iterator_traits_impl<Iterator, true>
 	{
+		// 获取迭代器各类型
 		typedef typename Iterator::iterator_category	iterator_category;
 		typedef typename Iterator::value_type			value_type;
 		typedef typename Iterator::pointer				pointer;
@@ -67,7 +71,7 @@ namespace mystl
 
 	/*
 	* std::is_convertible<from, to> 用于判断 from 是否可以转换为 to
-	* 这里用于判断迭代器 Iterator 的类型是否为只读迭代器 input_iterator_tag 或只写迭代器 output_iterator_tag 的基类（子类可以向基类转换）
+	* 这里用于判断迭代器 Iterator 的类型是否为只读迭代器 input_iterator_tag 或只写迭代器 output_iterator_tag 的基类（另外三个子类可以向这两个基类转换）
 	*/
 	template <typename Iterator>
 	struct iterator_traits_impl<Iterator, true>
@@ -81,6 +85,10 @@ namespace mystl
 	/*
 	* 迭代器萃取器的默认版本
 	* has_iterator_cat<Iterator>::value 用来判断变量类型是否为类类型
+	* 萃取器要萃取 iterator 的前提是这个 iterator 有 iterator_category 这个属性，对应代码下述代码
+	* has_iterator_cat<Iterator>::value
+	* 且该 iterator_category 可以转换成 input_iterator_tag 或 output_iterator_tag，对应代码下述代码
+	* public iterator_traits_helper<Iterator, has_iterator_cat<Iterator>::value>
 	*/
 	template <typename Iterator>
 	struct iterator_traits : public iterator_traits_helper<Iterator, has_iterator_cat<Iterator>::value> {};
@@ -95,8 +103,8 @@ namespace mystl
 	{
 		typedef random_access_iterator_tag	iterator_category;
 		typedef T							value_type;
-		typedef T* pointer;
-		typedef T& reference;
+		typedef T*							pointer;
+		typedef T&							reference;
 		typedef ptrdiff_t					difference_type;
 	};
 
@@ -111,4 +119,16 @@ namespace mystl
 		typedef ptrdiff_t					difference_type;
 	};
 
+
+	template <typename T, typename U, bool = has_iterator_cat<iterator_traits<T>>::value>
+	struct has_iterator_cat_of
+		: public m_bool_constant<std::is_convertible<
+		typename iterator_traits<T>::iterator::category, U>::value>
+	{};
+
+	template <typename T, typename U>
+	struct has_iterator_cat_of<T, U, false> : public m_false_type {};
+
+	template <typename Iter>
+	struct is_input_iterator :public has_iterator_cat_of<Iter, input_iterator_tag> {};
 }

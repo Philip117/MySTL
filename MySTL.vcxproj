@@ -148,6 +148,7 @@
     <ClInclude Include="MySTL\set_algo.h" />
     <ClInclude Include="MySTL\util.h" />
     <ClInclude Include="MySTL\uninitialized.h" />
+    <ClInclude Include="type_traits.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

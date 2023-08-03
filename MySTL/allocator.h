@@ -22,7 +22,10 @@ namespace mystl
 	template <typename T>
 	T* allocator<T>::allocate()
 	{
-		// 操作符 new 分配一个对象，函数 operator new() 分配内存空间
+		// new 操作符做两件事：分配内存和调用构造函数初始化
+		// 函数 operator new() 则负责分配内存空间，返回未初始化的内存
+		// :: 可以用作：①命名空间作用域符号；②全局作用域符号；③（类）作用域符号
+		// 此处是②全局作用域符号
 		return static_cast<T*>(::operator new(sizeof(T)));
 	}
 
