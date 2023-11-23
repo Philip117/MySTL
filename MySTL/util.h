@@ -24,6 +24,19 @@ namespace mystl
 		return static_cast<typename std::remove_reference<T>::type&&>(arg);
 	}
 
+	template <typename T>
+	T&& forward(typename std::remove_reference<T>::type& arg) noexcept
+	{
+		return static_cast<T&&>(arg);
+	}
+
+	template <typename T>
+	T&& forward(typename std::remove_reference<T>::type&& arg) noexcept
+	{
+		static_assert(!std::is_lvalue_reference<T>::value, "bad forward");
+		return static_cast<T&&>(arg);
+	}
+
 	/*
 	* 【功能】交换两个元素
 	*/

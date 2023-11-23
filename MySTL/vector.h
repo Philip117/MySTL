@@ -8,7 +8,7 @@ namespace mystl
 	class vector
 	{
 		/*
-		* static_assert(value, err) value 为 true 时输出 err
+		* static_assert(value, err) value 为 false 时输出 err
 		* STL 中，vector<bool> a是存在的，但是存储时一个字节存储了 8 个 bool 型变量
 		* 这导致 &a[1] 到 &a[7] 都无法获取到对应的 4/8 字节的地址
 		*/
@@ -16,7 +16,7 @@ namespace mystl
 
 		// 公有变量和别名
 	public:
-		typedef mystl::allocator<T> allocator_type;
+		typedef mystl::allocator<T> allocator_type;	// allocator 是内存分配器
 		typedef mystl::allocator<T> data_allocator;
 
 		// 因为编译时 allocator_type 尚未实例化，需加上 typename 以告知编译器 value_type 是一个类成员
@@ -24,6 +24,7 @@ namespace mystl
 		typedef typename allocator_type::size_type size_type;
 
 		typedef value_type* iterator;
+		typedef const value_type* const_iterator;
 
 		// 私有变量
 	private:
@@ -32,9 +33,10 @@ namespace mystl
 		iterator cap_;	// 目前存储空间的尾部？
 
 	public:
+		// noexcept 标明这个函数不抛出错误
 		vector() noexcept
 		{
-			try_init();
+			try_init();	// 不抛出错误的初始化函数
 		}
 
 		/*
@@ -43,7 +45,7 @@ namespace mystl
 		*/
 		explicit vector(size_type n)
 		{
-			fill_init()
+			fill_init(n, value_type());	// 会抛出错误的初始化函数，且能根据容量创建适当大小的空间
 		}
 
 	private:
@@ -90,7 +92,7 @@ namespace mystl
 	template<typename T>
 	void vector<T>::fill_init(size_type n, const value_type& value)
 	{
-		const size_type init_size = mystl::max(static_cast<size_type>(16), n);	// 取默认长度和所给大小的最大值
+		const size_type init_size = mystl::max(static_cast<size_type>(16), n);	// 取默认大小 16 和指定大小的最大值
 		init_space(n, init_size);	// 初始化vector
 		mystl::uninitialied_fill_n(begin_, n, value);	// 填充默认值
 	}

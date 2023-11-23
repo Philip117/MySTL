@@ -92,19 +92,21 @@ namespace mystl
 
 	/*
 	* 【作用】将随机读取迭代器区间 [first, last) 的所有元素赋值为 value
+	* 区分两个 fill_cat 就看第四个参数
 	*/
 	template <typename RandomIter, typename T>
 	void fill_cat(RandomIter first, RandomIter last, const T& value, mystl::random_access_iterator_tag)
 	{
-		fill_cat(first, last - first, value, iterator_category(first));
+		fill_n(first, last - first, value, iterator_category(first));
 	}
 
 	/*
 	* 【作用】将单向移动迭代器区间 [first, last) 的所有元素赋值为 value？
 	*/
 	template <typename ForwardIter, typename T>
-	void fill(ForwardIter first, ForwardIter last, const T& value, mystl::forward_iterator_tag)
+	void fill(ForwardIter first, ForwardIter last, const T& value)
 	{
-		fill_cat(first, last, value, iterator_category(first));
+		fill_cat(first, last, value, iterator_category(first));	// 根据萃取迭代器萃取出来的迭代器类型决定调用哪个 fill_cat
 	}
+
 }
