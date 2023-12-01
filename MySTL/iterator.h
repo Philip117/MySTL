@@ -32,17 +32,21 @@ namespace mystl
 	struct has_iterator_cat
 	{
 	private:
-		struct two { char a; char b };	// 定义一个两字符的结构体
+		struct two { char a; char b; };	// 定义一个两字符的结构体
 		
-		template <typename U>
-		static two test(...);	// 返回值大小为两字符
-
 		/*
-		* 如果迭代器有属性 iterator_category，则函数 test 优先匹配该版本
-		* 返回值大小为一字符
+		* 只写类型不写变量，属于哑元函数，一般用于向前兼容或区分重载的同名函数
+		* 这里仅用于匹配没有迭代器标记成员的对象，用于返回大小为 2 字符的变量
 		*/
 		template <typename U>
-		static char test(typename U::iterator_category *= 0);
+		static two test(...) {};	// 返回值大小为两字符
+
+		/*
+		*	如果迭代器有属性 iterator_category，则函数 test 优先匹配该版本
+		*	返回值大小为 1 字符
+		*/
+		template <typename U>
+		static char test(typename U::iterator_category) {};
 
 	public:
 		/*
@@ -167,6 +171,7 @@ namespace mystl
 		is_output_iterator<Iterator>::value>
 	{};
 
+
 	/*
 	* 返回值的类型是迭代器萃取出来的类型标记，即 input_iterator_tag 等的对象
 	* 这个对象没有成员
@@ -179,6 +184,9 @@ namespace mystl
 		return Category();
 	}
 
+	/*
+	* 返回值是指针减法差值的类型
+	*/
 	template <typename Iterator>
 	typename iterator_traits<Iterator>::difference_type*
 		distance_type(const Iterator&)
@@ -186,6 +194,9 @@ namespace mystl
 		return static_cast<typename iterator_traits<Iterator>::difference_type*>(0);
 	}
 
+	/*
+	* 返回值是值的类型
+	*/
 	template <typename Iterator>
 	typename iterator_traits<Iterator>::value_type*
 		value_type(const Iterator&)
@@ -194,7 +205,7 @@ namespace mystl
 	}
 
 	/*
-	* 计算迭代器跨越的内存距离
+	* 计算迭代器跨越的内存距离，中间可能有不属于迭代器的内存空间
 	*/
 	template <typename InputIterator>
 	typename iterator_traits<InputIterator>::difference_type
@@ -219,5 +230,48 @@ namespace mystl
 	{
 		return last - first;
 	}
+
+	/*
+	* 输入迭代器前进 n 个距离
+	*/
+	template <typename InputIterator, typename Distance>
+	void advance_dispatch(InputIterator& i, Distance n, input_iterator_tag)
+	{
+		while (n--)
+			i++;
+	}
+
+	/*
+	* 双向迭代器前进或后退 n 个距离
+	*/
+	template <typename BidirectionalIterator, typename Distance>
+	void advance_dispatch(BidirectionalIterator& i, Distance n, bidirectional_iterator_tag)
+	{
+		if (n >= 0)
+			while (n--)
+				i++;
+		else
+			while (n++)
+				--i;
+	}
+
+	/*
+	* 随机迭代器前进 n 个距离
+	*/
+	template <typename RandomIterator, typename Distance>
+	void advance_dispatch(RandomIterator& i, Distance n, random_access_iterator_tag)
+	{
+		i += n;
+	}
+
+	/*
+	* 迭代器前进或后退 n 个距离（后退仅适用于双向迭代器）
+	*/
+	template <typename Iterator, typename Distance>
+	void advance(Iterator& i, Distance n)
+	{
+		advance_dispatch(i, n, iterator_category(i));
+	}
+
 
 }

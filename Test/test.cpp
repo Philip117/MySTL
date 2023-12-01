@@ -1,21 +1,42 @@
 #include <iostream>
 #include <vector>
+#include "vector.h"
 #include <algorithm>
 #include "../MySTL/algorithm.h"
 
-template <typename T>
-struct A
+class A
 {
-	T b;
+public:
 	A() {};
 };
 
+class B
+{
+public:
+	B() {};
+};
+
+class C
+{
+public:
+	C() {};
+	C(C&) = delete;
+};
+
+class D
+{
+public:
+	D() {};
+	D(D&) {};
+	D& operator=(const D&)= delete;
+};
 
 int main()
 {
-	A<int*> a;
-
-	std::cout << a.b << std::endl;
+	mystl::vector<A> a;
+	mystl::vector<B> b(1);
+	mystl::vector<C> c(17);
+	mystl::vector<D> d(17);
 
 	return 0;
 }

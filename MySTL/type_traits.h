@@ -3,7 +3,7 @@
 namespace mystl
 {
 	template <typename T, T v>
-	struct m_bool_constant
+	struct m_integral_constant
 	{
 		static constexpr T value = v;
 	};
